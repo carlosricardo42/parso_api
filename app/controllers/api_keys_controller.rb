@@ -1,8 +1,7 @@
 class ApiKeysController < ApplicationController
   before_action :set_api_key, only: [:show, :edit, :update, :destroy]
   before_action :set_md5_api_key, only: [:create, :update]
-  # rescue_from StandardError, with: :standard_error
-  # rescue_from ActiveRecord::RecordNotFound, with: :n  ot_found
+  before_action :get_api_key, only: :find_duplicates
 
   # GET /api_keys
   # GET /api_keys.json
@@ -64,19 +63,12 @@ class ApiKeysController < ApplicationController
   end
 
   def find_duplicates
-    # puts "#{@response}"
-    binding.pry
-    @key = params[:api_key]
-    @api_key = ApiKey.find_by(api_key: params[:api_key])
-    @data = params[:data]
-    binding.pry
+    @duplicates = @api_key.find_by_key(@data)
     respond_to do |format|
-      if @api_key.blank?
+      if @duplicates.blank?
         format.json { render json: {code: '401', status: :unauthorized}, status: :unauthorized }
         format.html { redirect_to api_keys_path, status: :unauthorized }
       else
-        @duplicates = @api_key.get_duplicates(@data)
-        @api_key.set_requests
         format.json { render json: {code: '200', status: :success, duplicates: @duplicates}, status: :ok}
       end
     end
@@ -94,18 +86,16 @@ class ApiKeysController < ApplicationController
       params[:api_key][:api_key] = Digest::MD5.hexdigest(email) unless email.blank?
     end
 
+    #get the params for call the method to search the result duplicates
+    def get_api_key
+      @api_key = ApiKey.find_by(api_key: params[:api_key])
+      #  @api_key = ApiKey.first
+      @data = params[:data]
+      # @data = ["hola","parso","mundo","hola","agua","papa","parso"]
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def api_key_params
       params.require(:api_key).permit(:email, :api_key, :requests, :data)
-    end
-
-    protected
-    #Render standar error
-    def standard_error(error)
-      render status: :bad_request, json: { error: error.message }
-    end
-    #Render not found error
-    def not_found(error)
-      render status: :not_found, json: { error: error.message }
     end
 end
