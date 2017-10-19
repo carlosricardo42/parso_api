@@ -1,8 +1,9 @@
-<%= form_with(model: api_key, local: true) do |form| %>
+<%= form_with(model: api_key, local: true, class: "form-horizontal") do |form| %>
   <% if api_key.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(api_key.errors.count, "error") %> prohibited this api_key from being saved:</h2>
-
+      <div class="alert alert-danger">
+        <h2><%= pluralize(api_key.errors.count, "error") %> prohibited this api_key from being saved:</h2>
+      </div>
       <ul>
       <% api_key.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -10,13 +11,14 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.text_field :email, id: :api_key_string %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  <div class="col-md-6">
+     <div class="form-group field">
+        <%= form.label :email, class: "control-label" %>
+        <%= form.text_field :email, { id: :api_key_string, type: "email", class: "form-control",placeholder:"Insert an email", autofocus: "autofocus"} %>
+    </div>
+    <div class="form-group actions">
+      <%= link_to (root_path), class: "btn btn-sm btn-default", role: "button"   do %><span class="glyphicon glyphicon-chevron-left"></span> Back<%end%>
+      <%= form.submit "New api Key", class: "btn btn-sm btn-primary"%>
+    </div>
   </div>
 <% end %>

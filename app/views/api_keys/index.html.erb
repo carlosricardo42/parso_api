@@ -1,30 +1,32 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-md-12">
+    <p id="notice"><%= notice %></p>
+    <h1 class="center">Api Keys</h1>
+    <div class="col-md-10">
+      <table class="table table-responsive table-condensed">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Api Key</th>
+            <th scope="col">Num of Requests</th>
+            <th scope="col" colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @api_keys.each do |api_key| %>
+            <tr>
+              <td><%= api_key.email %></td>
+              <td><%= api_key.api_key %></td>
+              <td><%= api_key.requests %></td>
+              <td><%#= link_to 'Show', api_key %></td>
+              <td><%= link_to 'Delete', api_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <br>
+      <%= link_to 'New Api Key', new_api_key_path ,class: 'btn btn-primary btn-sm' %>
+    </div>
 
-<h1>Api Keys</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Api Key</th>
-      <th>Num of Requests</th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @api_keys.each do |api_key| %>
-      <tr>
-        <td><%= api_key.email %></td>
-        <td><%= api_key.api_key %></td>
-        <td><%= api_key.requests %></td>
-        <td><%= link_to 'Show', api_key %></td>
-        <td><%= link_to 'Delete', api_key, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Api Key', new_api_key_path %>
+  </div>
+</div>
