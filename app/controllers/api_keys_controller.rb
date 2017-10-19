@@ -63,7 +63,6 @@ class ApiKeysController < ApplicationController
   end
 
   def find_duplicates
-    @duplicates = @api_key.find_by_key(@data)
     respond_to do |format|
       if @duplicates.blank?
         format.json { render json: {code: '401', status: :unauthorized}, status: :unauthorized }
@@ -89,9 +88,10 @@ class ApiKeysController < ApplicationController
     #get the params for call the method to search the result duplicates
     def get_api_key
       @api_key = ApiKey.find_by(api_key: params[:api_key])
-      #  @api_key = ApiKey.first
       @data = params[:data]
+      #  @api_key = ApiKey.first
       # @data = ["hola","parso","mundo","hola","agua","papa","parso"]
+      @duplicates = @api_key.find_by_key(@data)  unless @api_key.blank?
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
