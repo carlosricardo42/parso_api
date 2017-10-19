@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171018203102) do
+ActiveRecord::Schema.define(version: 20171019073645) do
 
   create_table "api_keys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email"
-    t.string "key"
-    t.integer "requests"
+    t.string "api_key"
+    t.integer "requests", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
