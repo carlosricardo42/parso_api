@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 20171019073645) do
 
-  create_table "api_keys", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "api_keys", force: :cascade do |t|
     t.string "email"
     t.string "api_key"
     t.integer "requests", default: 0

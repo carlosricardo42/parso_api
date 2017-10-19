@@ -64,9 +64,12 @@ class ApiKeysController < ApplicationController
   end
 
   def find_duplicates
-
+    # puts "#{@response}"
+    binding.pry
+    @key = params[:api_key]
     @api_key = ApiKey.find_by(api_key: params[:api_key])
     @data = params[:data]
+    binding.pry
     respond_to do |format|
       if @api_key.blank?
         format.json { render json: {code: '401', status: :unauthorized}, status: :unauthorized }
@@ -101,7 +104,7 @@ class ApiKeysController < ApplicationController
     def standard_error(error)
       render status: :bad_request, json: { error: error.message }
     end
-    #Render not found error 
+    #Render not found error
     def not_found(error)
       render status: :not_found, json: { error: error.message }
     end
