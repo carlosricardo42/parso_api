@@ -63,39 +63,38 @@ class ApiKeysController < ApplicationController
   end
 
   def find_duplicates
-    respond_to do |format|
       if @duplicates.blank?
-        format.json { render json: {code: '401', status: :unauthorized}, status: :unauthorized }
-        format.html { redirect_to api_keys_path, status: :unauthorized }
+         render json: {code: '401', status: :unauthorized}, status: :unauthorized
+        # format.html { redirect_to api_keys_path, status: :unauthorized }
       else
-        format.json { render json: {code: '200', status: :success, duplicates: @duplicates}, status: :ok}
+        render json: {code: '200', status: :success, duplicates: @duplicates}, status: :ok}
       end
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_key
-      @api_key = ApiKey.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_api_key
+    @api_key = ApiKey.find(params[:id])
+  end
 
-    #Use Digest to set the api_key parameter
-    def set_md5_api_key
-      email =   params[:api_key][:email]
-      params[:api_key][:api_key] = Digest::MD5.hexdigest(email) unless email.blank?
-    end
+  #Use Digest to set the api_key parameter
+  def set_md5_api_key
+    email =   params[:api_key][:email]
+    params[:api_key][:api_key] = Digest::MD5.hexdigest(email) unless email.blank?
+  end
 
-    #get the params for call the method to search the result duplicates
-    def get_api_key
-      @api_key = ApiKey.find_by(api_key: params[:api_key])
-      @data = params[:data]
-      #  @api_key = ApiKey.first
-      # @data = ["hola","parso","mundo","hola","agua","papa","parso"]
-      @duplicates = @api_key.find_by_key(@data)  unless @api_key.blank?
-    end
+  #get the params for call the method to search the result duplicates
+  def get_api_key
+    @api_key = ApiKey.find_by(api_key: params[:api_key])
+    @data = params[:data]
+    #  @api_key = ApiKey.first
+    # @data = ["hola","parso","mundo","hola","agua","papa","parso"]
+    @duplicates = @api_key.find_by_key(@data)  unless @api_key.blank?
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def api_key_params
-      params.require(:api_key).permit(:email, :api_key, :requests, :data)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def api_key_params
+    params.require(:api_key).permit(:email, :api_key, :requests, :data)
+  end
 end
