@@ -67,9 +67,8 @@ class ApiKeysController < ApplicationController
          render json: {code: '401', status: :unauthorized}, status: :unauthorized
         # format.html { redirect_to api_keys_path, status: :unauthorized }
       else
-        render json: {code: '200', status: :success, duplicates: @duplicates}, status: :ok}
+        render json: {code: '200', status: :success, duplicates: @duplicates}, status: :ok
       end
-    end
   end
 
   private
